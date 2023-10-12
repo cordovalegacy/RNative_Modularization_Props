@@ -1,8 +1,12 @@
 
-import { Button, TextInput, View, StyleSheet } from 'react-native'
+// !Packages
 import { useState } from 'react'
+import { Button, TextInput, View, Modal, Image, Text } from 'react-native'
 
-const GoalForm = ({ setGoals }) => {
+// !Styles
+import { stylesGoalForm } from '../styles/styles'
+
+const GoalForm = ({ setGoals, isModalOpen, modalToggler }) => {
 
     const [goal, setGoal] = useState("")
 
@@ -13,44 +17,28 @@ const GoalForm = ({ setGoals }) => {
 
     const submitHandler = () => {
         setGoals(prevGoals => [...prevGoals, { text: goal, id: Math.random().toString() }])
+        modalToggler()
     }
 
     return (
-        <View style={stylesGoalForm.inputContainer1}>
-            <TextInput
-                placeholder='Your course goal!'
-                style={stylesGoalForm.input}
-                onChangeText={changeHandler} />
-            <View style={stylesGoalForm.viewButton}>
-                <Button title='Goal!!' onPress={submitHandler} />
+        <Modal visible={isModalOpen} animationType='slide'>
+            <View style={stylesGoalForm.inputContainer}>
+                <Text style={{fontSize: 25, marginBottom: 10}}>My First To Do List in React Native</Text>
+                <Image
+                    source={require('../assets/formImage.png')}
+                    style={stylesGoalForm.formImage}
+                />
+                <TextInput
+                    placeholder='Type your course goal here!'
+                    style={stylesGoalForm.input}
+                    onChangeText={changeHandler} />
+                <View style={stylesGoalForm.viewButton}>
+                    <Button title='Goal!!' onPress={submitHandler} color={"blue"} />
+                    <Button title="Cancel" onPress={modalToggler} color={"red"} />
+                </View>
             </View>
-        </View>
+        </Modal>
     )
 }
 
 export default GoalForm
-
-const stylesGoalForm = StyleSheet.create({
-    inputContainer1: {
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: "space-between",
-        alignItems: "center",
-        marginBottom: 5,
-        width: "100%",
-        borderBottomWidth: 2,
-        borderColor: "#cccccc",
-        height: "25%"
-    },
-    input: {
-        borderWidth: 1,
-        borderColor: "#cccccc",
-        width: "75%",
-        paddingLeft: 10,
-        padding: 10,
-    },
-    viewButton: {
-        width: "20%",
-        backgroundColor: "lightblue"
-    }
-})
